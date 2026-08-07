@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title><%= applicationName %></title>
+
+  <link
+    rel="stylesheet"
+    href="/css/style.css"
+  >
+</head>
+
+<body>
+  <main class="container">
+    <section class="card">
+      <p class="label">
+        Programming Languages Laboratory
+      </p>
+
+      <h1><%= applicationName %></h1>
+
+      <p class="message">
+        Starter application initialized successfully.
+      </p>
+
+      <dl class="details">
+        <div>
+          <dt>Current Sprint</dt>
+          <dd><%= currentSprint %></dd>
+        </div>
+
+        <div>
+          <dt>Technology</dt>
+          <dd><%= technology %></dd>
+        </div>
+
+        <div>
+          <dt>Version</dt>
+          <dd><%= applicationVersion %></dd>
+        </div>
+      </dl>
+
+      <p class="status">
+        Environment status: Ready
+      </p>
+    </section>
+  </main>
+</body>
+</html>

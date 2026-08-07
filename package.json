@@ -1,0 +1,34 @@
+{
+  "name": "csms-javascript-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JavaScript and Express.js implementation of the Community Services Management System",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "test:watch": "node --test --watch"
+  },
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11"
+  },
+  "keywords": [
+    "csms",
+    "express",
+    "javascript",
+    "programming-languages",
+    "uphsl"
+  ],
+  "author": "UPHSL Programming Languages Laboratory",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2"
+  }
+}
