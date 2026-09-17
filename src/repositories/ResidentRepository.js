@@ -38,6 +38,41 @@ export class ResidentRepository {
       return null;
     }
 
+    return this.mapRowToResident(row);
+  }
+
+  findAll() {
+    const selectStmt = this.db.prepare(`
+      SELECT id, first_name, last_name, address, contact_number, email, status
+      FROM residents
+      ORDER BY last_name ASC, first_name ASC, id ASC
+    `);
+
+    const rows = selectStmt.all();
+    return rows.map((row) => this.mapRowToResident(row));
+  }
+
+  searchByName(searchTerm) {
+    const normalizedTerm = (searchTerm || "").trim();
+
+    if (normalizedTerm.length === 0) {
+      return this.findAll();
+    }
+
+    const selectStmt = this.db.prepare(`
+      SELECT id, first_name, last_name, address, contact_number, email, status
+      FROM residents
+      WHERE LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ?
+      ORDER BY last_name ASC, first_name ASC, id ASC
+    `);
+
+    const pattern = `%${normalizedTerm.toLowerCase()}%`;
+    const rows = selectStmt.all(pattern, pattern);
+
+    return rows.map((row) => this.mapRowToResident(row));
+  }
+
+  mapRowToResident(row) {
     return new Resident({
       id: Number(row.id),
       firstName: row.first_name,
