@@ -25,6 +25,26 @@ export class ResidentRepository {
     return resident;
   }
 
+  update(resident) {
+    const updateStmt = this.db.prepare(`
+      UPDATE residents
+      SET first_name = ?, last_name = ?, address = ?, contact_number = ?, email = ?, status = ?
+      WHERE id = ?
+    `);
+
+    updateStmt.run(
+      resident.firstName,
+      resident.lastName,
+      resident.address,
+      resident.contactNumber,
+      resident.email,
+      resident.status,
+      resident.id
+    );
+
+    return resident;
+  }
+
   findById(residentId) {
     const selectStmt = this.db.prepare(`
       SELECT id, first_name, last_name, address, contact_number, email, status
