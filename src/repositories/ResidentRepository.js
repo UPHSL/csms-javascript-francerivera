@@ -45,6 +45,17 @@ export class ResidentRepository {
     return resident;
   }
 
+  deactivateById(residentId) {
+    const deactivateStmt = this.db.prepare(`
+      UPDATE residents
+      SET status = 'Inactive'
+      WHERE id = ?
+    `);
+
+    deactivateStmt.run(residentId);
+    return this.findById(residentId);
+  }
+
   findById(residentId) {
     const selectStmt = this.db.prepare(`
       SELECT id, first_name, last_name, address, contact_number, email, status
