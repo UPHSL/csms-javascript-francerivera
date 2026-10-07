@@ -24,6 +24,17 @@ export class ServiceRequestRepository {
     return serviceRequest;
   }
 
+  updateStatus(serviceRequestId, newStatus) {
+    const updateStmt = this.db.prepare(`
+      UPDATE service_requests
+      SET status = ?
+      WHERE id = ?
+    `);
+
+    updateStmt.run(newStatus, serviceRequestId);
+    return this.findById(serviceRequestId);
+  }
+
   findById(serviceRequestId) {
     const selectStmt = this.db.prepare(`
       SELECT id, resident_id, service_type, description, date_requested, status
