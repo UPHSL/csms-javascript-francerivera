@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resident Management - Community Services Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="page-header">
+      <div class="header-container">
+        <div>
+          <p class="breadcrumbs"><a href="/">Home</a> / Resident Management</p>
+          <h1>Resident Management</h1>
+        </div>
+        <div class="header-actions">
+          <a href="/residents/register" id="btnRegisterResident" class="btn btn-primary">+ Register Resident</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <% if (message) { %>
+        <div class="alert alert-success" role="status" id="flashMessage">
+          <%= message %>
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <section class="search-panel">
+        <form action="/residents" method="GET" class="search-form">
+          <div class="search-input-group">
+            <label for="searchInput" class="sr-only">Search Residents by First or Last Name</label>
+            <input
+              type="text"
+              id="searchInput"
+              name="search"
+              placeholder="Search by first or last name..."
+              value="<%= searchTerm || '' %>"
+            >
+            <button type="submit" id="btnSearch" class="btn btn-secondary">Search</button>
+            <% if (searchTerm) { %>
+              <a href="/residents" id="btnClearSearch" class="btn btn-outline">Clear</a>
+            <% } %>
+          </div>
+        </form>
+      </section>
+
+      <section class="table-container">
+        <% if (residents.length === 0) { %>
+          <div class="empty-state">
+            <p class="empty-title">No Residents found.</p>
+            <p class="empty-description">
+              <% if (searchTerm) { %>
+                No resident records matched your search query "<%= searchTerm %>".
+              <% } else { %>
+                There are currently no residents recorded in the system.
+              <% } %>
+            </p>
+          </div>
+        <% } else { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">Contact Number</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">Available Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% residents.forEach(resident => { %>
+                <tr data-resident-id="<%= resident.id %>">
+                  <td class="col-id"><%= resident.id %></td>
+                  <td><%= resident.firstName %></td>
+                  <td><%= resident.lastName %></td>
+                  <td><%= resident.address %></td>
+                  <td><%= resident.contactNumber %></td>
+                  <td><%= resident.email %></td>
+                  <td>
+                    <span class="status-badge status-<%= resident.status.toLowerCase() %>">
+                      <%= resident.status %>
+                    </span>
+                  </td>
+                  <td class="col-actions">
+                    <a href="/residents/<%= resident.id %>/edit" class="btn btn-sm btn-edit">Edit</a>
+                    <% if (resident.status === 'Active') { %>
+                      <form action="/residents/<%= resident.id %>/deactivate" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-deactivate" onclick="return confirm('Are you sure you want to deactivate this resident?');">Deactivate</button>
+                      </form>
+                    <% } else { %>
+                      <span class="text-muted status-inactive-text">Inactive</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
