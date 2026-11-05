@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Resident - Community Services Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="page-header">
+      <div class="header-container">
+        <div>
+          <p class="breadcrumbs"><a href="/">Home</a> / <a href="/residents">Resident Management</a> / Edit</p>
+          <h1>Edit Resident</h1>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <section class="form-card">
+        <% if (errors && errors.length > 0) { %>
+          <div class="alert alert-danger" role="alert">
+            <h2 class="alert-title">Please correct the following errors:</h2>
+            <ul class="error-list">
+              <% errors.forEach(err => { %>
+                <li><%= err %></li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
+
+        <div class="metadata-panel">
+          <div class="metadata-item">
+            <span class="metadata-label">Resident ID:</span>
+            <span class="metadata-value" id="residentIdValue"><%= resident.id %></span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-label">Current Status:</span>
+            <span class="status-badge status-<%= resident.status ? resident.status.toLowerCase() : 'active' %>" id="residentStatusValue">
+              <%= resident.status %>
+            </span>
+          </div>
+        </div>
+
+        <form action="/residents/<%= resident.id %>/edit" method="POST" class="standard-form">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value="<%= resident.firstName || '' %>"
+              placeholder="e.g. Juan"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value="<%= resident.lastName || '' %>"
+              placeholder="e.g. Dela Cruz"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value="<%= resident.address || '' %>"
+              placeholder="e.g. Barangay Santo Tomas"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="contactNumber">Contact Number</label>
+            <input
+              type="text"
+              id="contactNumber"
+              name="contactNumber"
+              value="<%= resident.contactNumber || '' %>"
+              placeholder="e.g. 09171234567"
+            >
+            <small class="form-hint">Must be 11 digits starting with 09 (e.g. 09171234567)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value="<%= resident.email || '' %>"
+              placeholder="e.g. juan@example.com"
+            >
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnSubmitUpdate" class="btn btn-primary">Update Resident</button>
+            <a href="/residents" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

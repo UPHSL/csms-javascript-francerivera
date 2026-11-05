@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Service Request - Community Services Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="page-header">
+      <div class="header-container">
+        <div>
+          <nav class="breadcrumbs">
+            <a href="/">Home</a> / 
+            <a href="/residents">Residents</a> / 
+            <a href="/service-requests">Service Requests</a> / 
+            Submit
+          </nav>
+          <h1>Submit Service Request</h1>
+        </div>
+        <div class="header-actions">
+          <a href="/residents" class="btn btn-outline" target="_blank" rel="noopener">View Residents</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <section class="form-card">
+        <% if (errors && errors.length > 0) { %>
+          <div class="alert alert-danger" role="alert">
+            <h2 class="alert-title">Please correct the following errors:</h2>
+            <ul class="error-list">
+              <% errors.forEach(err => { %>
+                <li><%= err %></li>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
+
+        <form action="/service-requests/new" method="POST" class="standard-form">
+          <div class="form-group">
+            <label for="residentId">Resident ID</label>
+            <input
+              type="number"
+              id="residentId"
+              name="residentId"
+              value="<%= serviceRequest.residentId || '' %>"
+              placeholder="e.g. 1"
+              required
+            >
+            <small class="form-hint">Enter the ID of the eligible Active Resident requesting service (<a href="/residents">Browse Residents</a>)</small>
+          </div>
+
+          <div class="form-group">
+            <label for="serviceType">Service Type</label>
+            <input
+              type="text"
+              id="serviceType"
+              name="serviceType"
+              value="<%= serviceRequest.serviceType || '' %>"
+              placeholder="e.g. Barangay Clearance, Certificate of Indigency, Health Assistance"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              class="form-textarea"
+              placeholder="Describe the requested community service..."
+              required
+            ><%= serviceRequest.description || '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="dateRequested">Date Requested</label>
+            <input
+              type="date"
+              id="dateRequested"
+              name="dateRequested"
+              value="<%= serviceRequest.dateRequested || '' %>"
+              required
+            >
+            <small class="form-hint">Format: YYYY-MM-DD</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="btnSubmitServiceRequest" class="btn btn-primary">Submit Service Request</button>
+            <a href="/service-requests" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

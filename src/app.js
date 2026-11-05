@@ -5,6 +5,18 @@ import express from "express";
 
 import { notFound } from "./middleware/notFound.js";
 import mainRoutes from "./routes/index.js";
+import { createDatabaseConnection } from "./database/db.js";
+import { ResidentRepository } from "./repositories/ResidentRepository.js";
+import { ResidentValidator } from "./services/ResidentValidator.js";
+import { ResidentSearchService } from "./services/ResidentSearchService.js";
+import { ResidentRegistrationService } from "./services/ResidentRegistrationService.js";
+import { ResidentUpdateService } from "./services/ResidentUpdateService.js";
+import { ResidentDeactivationService } from "./services/ResidentDeactivationService.js";
+import { ServiceRequestRepository } from "./repositories/ServiceRequestRepository.js";
+import { ServiceRequestValidator } from "./validators/ServiceRequestValidator.js";
+import { ServiceRequestSubmissionService } from "./services/ServiceRequestSubmissionService.js";
+import { ServiceRequestStatusService } from "./services/ServiceRequestStatusService.js";
+import { ServiceRequestQueryService } from "./services/ServiceRequestQueryService.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFile);
@@ -12,9 +24,10 @@ const currentDirectory = path.dirname(currentFile);
 /**
  * Create and configure the CSMS Express application.
  *
+ * @param {object} [options] Optional dependencies and configuration
  * @returns {import("express").Express} Configured Express application.
  */
-export function createApp() {
+export function createApp(options = {}) {
   const app = express();
 
   app.disable("x-powered-by");
@@ -25,6 +38,55 @@ export function createApp() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(express.static(path.join(currentDirectory, "..", "public")));
+
+  const db = options.db || createDatabaseConnection(options.dbPath || null);
+  const residentRepository = options.residentRepository || new ResidentRepository(db);
+  const residentValidator = options.residentValidator || new ResidentValidator();
+  const residentSearchService =
+    options.residentSearchService || new ResidentSearchService(residentRepository);
+  const residentRegistrationService =
+    options.residentRegistrationService ||
+    new ResidentRegistrationService(residentValidator, residentRepository);
+  const residentUpdateService =
+    options.residentUpdateService ||
+    new ResidentUpdateService(residentValidator, residentRepository);
+  const residentDeactivationService =
+    options.residentDeactivationService ||
+    new ResidentDeactivationService(residentRepository);
+
+  const serviceRequestRepository =
+    options.serviceRequestRepository || new ServiceRequestRepository(db);
+  const serviceRequestValidator =
+    options.serviceRequestValidator || new ServiceRequestValidator();
+  const serviceRequestSubmissionService =
+    options.serviceRequestSubmissionService ||
+    new ServiceRequestSubmissionService(
+      serviceRequestValidator,
+      serviceRequestRepository,
+      residentRepository
+    );
+  const serviceRequestStatusService =
+    options.serviceRequestStatusService ||
+    new ServiceRequestStatusService(serviceRequestRepository);
+  const serviceRequestQueryService =
+    options.serviceRequestQueryService ||
+    new ServiceRequestQueryService(serviceRequestRepository);
+
+  app.locals.services = {
+    db,
+    residentRepository,
+    residentValidator,
+    residentSearchService,
+    residentRegistrationService,
+    residentUpdateService,
+    residentDeactivationService,
+    serviceRequestRepository,
+    serviceRequestValidator,
+    serviceRequestSubmissionService,
+    serviceRequestStatusService,
+    serviceRequestQueryService,
+    ...(options.services || {})
+  };
 
   app.use(mainRoutes);
 
