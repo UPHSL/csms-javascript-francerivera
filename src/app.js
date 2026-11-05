@@ -12,6 +12,11 @@ import { ResidentSearchService } from "./services/ResidentSearchService.js";
 import { ResidentRegistrationService } from "./services/ResidentRegistrationService.js";
 import { ResidentUpdateService } from "./services/ResidentUpdateService.js";
 import { ResidentDeactivationService } from "./services/ResidentDeactivationService.js";
+import { ServiceRequestRepository } from "./repositories/ServiceRequestRepository.js";
+import { ServiceRequestValidator } from "./validators/ServiceRequestValidator.js";
+import { ServiceRequestSubmissionService } from "./services/ServiceRequestSubmissionService.js";
+import { ServiceRequestStatusService } from "./services/ServiceRequestStatusService.js";
+import { ServiceRequestQueryService } from "./services/ServiceRequestQueryService.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFile);
@@ -49,6 +54,24 @@ export function createApp(options = {}) {
     options.residentDeactivationService ||
     new ResidentDeactivationService(residentRepository);
 
+  const serviceRequestRepository =
+    options.serviceRequestRepository || new ServiceRequestRepository(db);
+  const serviceRequestValidator =
+    options.serviceRequestValidator || new ServiceRequestValidator();
+  const serviceRequestSubmissionService =
+    options.serviceRequestSubmissionService ||
+    new ServiceRequestSubmissionService(
+      serviceRequestValidator,
+      serviceRequestRepository,
+      residentRepository
+    );
+  const serviceRequestStatusService =
+    options.serviceRequestStatusService ||
+    new ServiceRequestStatusService(serviceRequestRepository);
+  const serviceRequestQueryService =
+    options.serviceRequestQueryService ||
+    new ServiceRequestQueryService(serviceRequestRepository);
+
   app.locals.services = {
     db,
     residentRepository,
@@ -57,6 +80,11 @@ export function createApp(options = {}) {
     residentRegistrationService,
     residentUpdateService,
     residentDeactivationService,
+    serviceRequestRepository,
+    serviceRequestValidator,
+    serviceRequestSubmissionService,
+    serviceRequestStatusService,
+    serviceRequestQueryService,
     ...(options.services || {})
   };
 

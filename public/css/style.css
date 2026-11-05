@@ -459,3 +459,185 @@ dd {
   gap: 0.75rem;
   margin-top: 1.5rem;
 }
+
+/* Service Request Additional UI Styles */
+.filter-select {
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #374151;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.standard-form input[type="number"],
+.standard-form input[type="date"] {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.standard-form input[type="number"]:focus,
+.standard-form input[type="date"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.col-desc {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status Badges for Service Requests */
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-in-progress {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.status-completed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Workflow Action Buttons */
+.btn-action-progress {
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+  color: #1e40af;
+  margin-right: 0.25rem;
+}
+
+.btn-action-progress:hover {
+  background: #bfdbfe;
+}
+
+.btn-action-complete {
+  background: #d1fae5;
+  border: 1px solid #86efac;
+  color: #065f46;
+  margin-right: 0.25rem;
+}
+
+.btn-action-complete:hover {
+  background: #a7f3d0;
+}
+
+.status-terminal-text {
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Details Page Layout */
+.details-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.details-item dt {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.details-item dd {
+  margin: 0;
+  font-size: 1rem;
+  color: #1f2937;
+}
+
+.details-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.description-box {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  white-space: pre-wrap;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.workflow-actions-panel {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.workflow-actions-panel h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  color: #374151;
+}
+
+.workflow-actions-group {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.terminal-banner {
+  padding: 0.85rem 1.25rem;
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+.terminal-banner p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.terminal-completed {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.terminal-cancelled {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}

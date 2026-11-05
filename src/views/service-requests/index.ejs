@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Request Management - Community Services Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="page-header">
+      <div class="header-container">
+        <div>
+          <nav class="breadcrumbs">
+            <a href="/">Home</a> / 
+            <a href="/residents">Residents</a> / 
+            Service Requests
+          </nav>
+          <h1>Service Request Management</h1>
+        </div>
+        <div class="header-actions">
+          <a href="/service-requests/new" id="btnSubmitServiceRequest" class="btn btn-primary">+ Submit Service Request</a>
+          <a href="/residents" class="btn btn-outline">View Residents</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <% if (message) { %>
+        <div class="alert alert-success" role="status" id="flashMessage">
+          <%= message %>
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <section class="search-panel">
+        <form action="/service-requests" method="GET" class="search-form">
+          <div class="search-input-group">
+            <label for="searchInput" class="sr-only">Search by Service Type or Description</label>
+            <input
+              type="text"
+              id="searchInput"
+              name="search"
+              placeholder="Search by service type or description..."
+              value="<%= searchTerm || '' %>"
+            >
+
+            <label for="statusFilter" class="sr-only">Filter by Status</label>
+            <select id="statusFilter" name="status" class="filter-select">
+              <option value="" <%= (!statusFilter) ? 'selected' : '' %>>All Statuses</option>
+              <option value="Pending" <%= (statusFilter === 'Pending') ? 'selected' : '' %>>Pending</option>
+              <option value="In Progress" <%= (statusFilter === 'In Progress') ? 'selected' : '' %>>In Progress</option>
+              <option value="Completed" <%= (statusFilter === 'Completed') ? 'selected' : '' %>>Completed</option>
+              <option value="Cancelled" <%= (statusFilter === 'Cancelled') ? 'selected' : '' %>>Cancelled</option>
+            </select>
+
+            <button type="submit" id="btnFilter" class="btn btn-secondary">Search / Filter</button>
+            <% if (searchTerm || statusFilter) { %>
+              <a href="/service-requests" id="btnClearFilter" class="btn btn-outline">Clear</a>
+            <% } %>
+          </div>
+        </form>
+      </section>
+
+      <section class="table-container">
+        <% if (serviceRequests.length === 0) { %>
+          <div class="empty-state">
+            <p class="empty-title">No Service Requests found.</p>
+            <p class="empty-description">
+              <% if (searchTerm || statusFilter) { %>
+                No service request records matched your current query criteria.
+              <% } else { %>
+                There are currently no service requests recorded in the system.
+              <% } %>
+            </p>
+          </div>
+        <% } else { %>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Resident ID</th>
+                <th scope="col">Service Type</th>
+                <th scope="col">Description</th>
+                <th scope="col">Date Requested</th>
+                <th scope="col">Status</th>
+                <th scope="col">Available Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% serviceRequests.forEach(req => { %>
+                <tr data-request-id="<%= req.id %>">
+                  <td class="col-id"><%= req.id %></td>
+                  <td><%= req.residentId %></td>
+                  <td><strong><%= req.serviceType %></strong></td>
+                  <td class="col-desc">
+                    <%= (req.description && req.description.length > 60) ? (req.description.substring(0, 60) + '...') : req.description %>
+                  </td>
+                  <td><%= req.dateRequested %></td>
+                  <td>
+                    <span class="status-badge status-<%= req.status.toLowerCase().replace(/\s+/g, '-') %>">
+                      <%= req.status %>
+                    </span>
+                  </td>
+                  <td class="col-actions">
+                    <a href="/service-requests/<%= req.id %>" class="btn btn-sm btn-edit">View</a>
+                    <% if (req.status === 'Pending') { %>
+                      <form action="/service-requests/<%= req.id %>/start-processing" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-action-progress">Start Processing</button>
+                      </form>
+                      <form action="/service-requests/<%= req.id %>/cancel" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-deactivate" onclick="return confirm('Are you sure you want to cancel this request?');">Cancel</button>
+                      </form>
+                    <% } else if (req.status === 'In Progress') { %>
+                      <form action="/service-requests/<%= req.id %>/complete" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-action-complete">Complete</button>
+                      </form>
+                      <form action="/service-requests/<%= req.id %>/cancel" method="POST" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-deactivate" onclick="return confirm('Are you sure you want to cancel this request?');">Cancel</button>
+                      </form>
+                    <% } else { %>
+                      <span class="text-muted status-terminal-text"><%= req.status %> (Terminal)</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
