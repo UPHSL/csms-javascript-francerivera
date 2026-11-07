@@ -103,6 +103,18 @@ export class ResidentRepository {
     return rows.map((row) => this.mapRowToResident(row));
   }
 
+  countAll() {
+    const stmt = this.db.prepare(`SELECT COUNT(*) as total FROM residents`);
+    const row = stmt.get();
+    return Number(row.total);
+  }
+
+  countByStatus(status) {
+    const stmt = this.db.prepare(`SELECT COUNT(*) as total FROM residents WHERE status = ?`);
+    const row = stmt.get(status);
+    return Number(row.total);
+  }
+
   mapRowToResident(row) {
     return new Resident({
       id: Number(row.id),

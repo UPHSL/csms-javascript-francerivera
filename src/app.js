@@ -17,6 +17,7 @@ import { ServiceRequestValidator } from "./validators/ServiceRequestValidator.js
 import { ServiceRequestSubmissionService } from "./services/ServiceRequestSubmissionService.js";
 import { ServiceRequestStatusService } from "./services/ServiceRequestStatusService.js";
 import { ServiceRequestQueryService } from "./services/ServiceRequestQueryService.js";
+import { DashboardService } from "./services/DashboardService.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFile);
@@ -72,6 +73,10 @@ export function createApp(options = {}) {
     options.serviceRequestQueryService ||
     new ServiceRequestQueryService(serviceRequestRepository);
 
+  const dashboardService =
+    options.dashboardService ||
+    new DashboardService(residentRepository, serviceRequestRepository);
+
   app.locals.services = {
     db,
     residentRepository,
@@ -85,6 +90,7 @@ export function createApp(options = {}) {
     serviceRequestSubmissionService,
     serviceRequestStatusService,
     serviceRequestQueryService,
+    dashboardService,
     ...(options.services || {})
   };
 
