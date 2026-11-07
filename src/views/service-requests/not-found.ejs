@@ -8,6 +8,23 @@
 </head>
 <body>
   <div class="app-layout">
+    <!-- Unified Municipal Portal Navigation Header -->
+    <header class="page-header">
+      <div class="header-container">
+        <a href="/dashboard" class="header-brand-link">
+          <div class="header-brand">
+            <span class="portal-badge">Civic Portal</span>
+            <span class="portal-title">Community Services Management System</span>
+          </div>
+        </a>
+        <nav class="portal-nav" aria-label="Main Navigation">
+          <a href="/dashboard" class="nav-link">Dashboard</a>
+          <a href="/residents" class="nav-link">Residents</a>
+          <a href="/service-requests" class="nav-link active" aria-current="page">Service Requests</a>
+        </nav>
+      </div>
+    </header>
+
     <main class="page-content not-found-layout">
       <div class="card not-found-card">
         <p class="label">404 - Not Found</p>
@@ -17,8 +34,7 @@
         </p>
         <div class="actions">
           <a href="/service-requests" class="btn btn-primary">Return to Service Requests</a>
-          <a href="/residents" class="btn btn-outline">View Residents</a>
-          <a href="/" class="btn btn-secondary">Home</a>
+          <a href="/dashboard" class="btn btn-secondary">Dashboard</a>
         </div>
       </div>
     </main>

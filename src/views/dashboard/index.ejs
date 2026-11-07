@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Community Services Management System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Unified Municipal Portal Navigation Header -->
+    <header class="page-header">
+      <div class="header-container">
+        <a href="/dashboard" class="header-brand-link">
+          <div class="header-brand">
+            <span class="portal-badge">Civic Portal</span>
+            <span class="portal-title">Community Services Management System</span>
+          </div>
+        </a>
+        <nav class="portal-nav" aria-label="Main Navigation">
+          <a href="/dashboard" class="nav-link active" aria-current="page">Dashboard</a>
+          <a href="/residents" class="nav-link">Residents</a>
+          <a href="/service-requests" class="nav-link">Service Requests</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-content">
+      <div class="breadcrumb-bar">
+        <p class="breadcrumbs"><a href="/">Home</a> / Dashboard</p>
+      </div>
+
+      <div class="page-title-row">
+        <div>
+          <h1>CSMS Dashboard</h1>
+          <p class="section-subtitle">Real-time operational summary and metrics across community records</p>
+        </div>
+        <div class="quick-actions">
+          <a href="/residents/register" class="btn btn-outline">+ Register Resident</a>
+          <a href="/service-requests/new" class="btn btn-primary">+ Submit Service Request</a>
+        </div>
+      </div>
+
+      <!-- 1. Resident Metrics Section -->
+      <section class="dashboard-section" aria-labelledby="headingResidents">
+        <div class="section-header">
+          <h3 id="headingResidents" class="section-title">Resident Summary</h3>
+          <a href="/residents" class="section-link">Manage Residents &rarr;</a>
+        </div>
+        <div class="stats-grid stats-grid-3">
+          <div class="stat-card">
+            <span class="stat-label">Total Residents</span>
+            <span class="stat-value" id="totalResidentsValue"><%= summary.residents.total %></span>
+            <span class="stat-subtext">All registered community members</span>
+          </div>
+          <div class="stat-card stat-card-success">
+            <span class="stat-label">Active Residents</span>
+            <span class="stat-value text-success" id="activeResidentsValue"><%= summary.residents.active %></span>
+            <span class="stat-subtext">Eligible for community services</span>
+          </div>
+          <div class="stat-card stat-card-muted">
+            <span class="stat-label">Inactive Residents</span>
+            <span class="stat-value text-muted" id="inactiveResidentsValue"><%= summary.residents.inactive %></span>
+            <span class="stat-subtext">Archived / Deactivated accounts</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Service Request Metrics Section -->
+      <section class="dashboard-section" aria-labelledby="headingServiceRequests">
+        <div class="section-header">
+          <h3 id="headingServiceRequests" class="section-title">Service Request Summary</h3>
+          <a href="/service-requests" class="section-link">Manage Service Requests &rarr;</a>
+        </div>
+        <div class="stats-grid stats-grid-6">
+          <div class="stat-card">
+            <span class="stat-label">Total Requests</span>
+            <span class="stat-value" id="totalRequestsValue"><%= summary.serviceRequests.total %></span>
+            <span class="stat-subtext">All recorded submissions</span>
+          </div>
+          <div class="stat-card stat-card-highlight">
+            <span class="stat-label">Open Requests</span>
+            <span class="stat-value text-highlight" id="openRequestsValue"><%= summary.serviceRequests.open %></span>
+            <span class="stat-subtext">Pending + In Progress</span>
+          </div>
+          <div class="stat-card stat-card-warning">
+            <span class="stat-label">Pending</span>
+            <span class="stat-value text-warning" id="pendingRequestsValue"><%= summary.serviceRequests.pending %></span>
+            <span class="stat-subtext">Awaiting initial processing</span>
+          </div>
+          <div class="stat-card stat-card-info">
+            <span class="stat-label">In Progress</span>
+            <span class="stat-value text-info" id="inProgressRequestsValue"><%= summary.serviceRequests.inProgress %></span>
+            <span class="stat-subtext">Currently being fulfilled</span>
+          </div>
+          <div class="stat-card stat-card-success">
+            <span class="stat-label">Completed</span>
+            <span class="stat-value text-success" id="completedRequestsValue"><%= summary.serviceRequests.completed %></span>
+            <span class="stat-subtext">Fulfilled terminal state</span>
+          </div>
+          <div class="stat-card stat-card-danger">
+            <span class="stat-label">Cancelled</span>
+            <span class="stat-value text-danger" id="cancelledRequestsValue"><%= summary.serviceRequests.cancelled %></span>
+            <span class="stat-subtext">Terminated requests</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Recent Service Requests Section -->
+      <section class="dashboard-section" aria-labelledby="headingRecent">
+        <div class="section-header">
+          <h3 id="headingRecent" class="section-title">Recent Service Requests</h3>
+          <span class="section-note">Showing up to 5 most recent requests</span>
+        </div>
+
+        <div class="table-container">
+          <% if (!summary.recentServiceRequests || summary.recentServiceRequests.length === 0) { %>
+            <div class="empty-state">
+              <p class="empty-title">No Service Requests available.</p>
+              <p class="empty-description">There are currently no service requests recorded in the system.</p>
+            </div>
+          <% } else { %>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Resident ID</th>
+                  <th scope="col">Service Type</th>
+                  <th scope="col">Date Requested</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% summary.recentServiceRequests.forEach(req => { %>
+                  <tr data-request-id="<%= req.id %>">
+                    <td class="col-id"><%= req.id %></td>
+                    <td><%= req.residentId %></td>
+                    <td><strong><%= req.serviceType %></strong></td>
+                    <td><%= req.dateRequested %></td>
+                    <td>
+                      <span class="status-badge status-<%= req.status.toLowerCase().replace(/\s+/g, '-') %>">
+                        <%= req.status %>
+                      </span>
+                    </td>
+                    <td class="col-actions">
+                      <a href="/service-requests/<%= req.id %>" class="btn btn-sm btn-edit">View Details</a>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+

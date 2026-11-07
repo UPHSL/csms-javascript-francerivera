@@ -8,24 +8,43 @@
 </head>
 <body>
   <div class="app-layout">
+    <!-- Unified Municipal Portal Navigation Header -->
     <header class="page-header">
       <div class="header-container">
-        <div>
-          <nav class="breadcrumbs">
-            <a href="/">Home</a> / 
-            <a href="/residents">Residents</a> / 
-            <a href="/service-requests">Service Requests</a> / 
-            Submit
-          </nav>
-          <h1>Submit Service Request</h1>
-        </div>
-        <div class="header-actions">
-          <a href="/residents" class="btn btn-outline" target="_blank" rel="noopener">View Residents</a>
-        </div>
+        <a href="/dashboard" class="header-brand-link">
+          <div class="header-brand">
+            <span class="portal-badge">Civic Portal</span>
+            <span class="portal-title">Community Services Management System</span>
+          </div>
+        </a>
+        <nav class="portal-nav" aria-label="Main Navigation">
+          <a href="/dashboard" class="nav-link">Dashboard</a>
+          <a href="/residents" class="nav-link">Residents</a>
+          <a href="/service-requests" class="nav-link active" aria-current="page">Service Requests</a>
+        </nav>
       </div>
     </header>
 
     <main class="page-content">
+      <div class="breadcrumb-bar">
+        <nav class="breadcrumbs">
+          <a href="/">Home</a> / 
+          <a href="/dashboard">Dashboard</a> / 
+          <a href="/service-requests">Service Requests</a> / 
+          Submit
+        </nav>
+      </div>
+
+      <div class="page-title-row">
+        <div>
+          <h1>Submit Service Request</h1>
+          <p class="section-subtitle">File a new community service, clearance, or certification request for an active resident</p>
+        </div>
+        <div class="quick-actions">
+          <a href="/residents" class="btn btn-outline">View Residents</a>
+          <a href="/service-requests" class="btn btn-outline">&larr; Back to Requests</a>
+        </div>
+      </div>
       <section class="form-card">
         <% if (errors && errors.length > 0) { %>
           <div class="alert alert-danger" role="alert">
@@ -85,7 +104,7 @@
               value="<%= serviceRequest.dateRequested || '' %>"
               required
             >
-            <small class="form-hint">Format: YYYY-MM-DD</small>
+            <small class="form-hint">Date when this request was filed</small>
           </div>
 
           <div class="form-actions">
@@ -96,5 +115,24 @@
       </section>
     </main>
   </div>
+
+  <script>
+    const form = document.querySelector("form.standard-form");
+    if (form) {
+      let submitted = false;
+      form.addEventListener("submit", function(e) {
+        if (submitted) {
+          e.preventDefault();
+          return;
+        }
+        submitted = true;
+        const btn = document.getElementById("btnSubmitServiceRequest");
+        if (btn) {
+          btn.disabled = true;
+          btn.innerText = "Submitting...";
+        }
+      });
+    }
+  </script>
 </body>
 </html>

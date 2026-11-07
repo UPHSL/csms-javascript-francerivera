@@ -8,24 +8,41 @@
 </head>
 <body>
   <div class="app-layout">
+    <!-- Unified Municipal Portal Navigation Header -->
     <header class="page-header">
       <div class="header-container">
-        <div>
-          <nav class="breadcrumbs">
-            <a href="/">Home</a> / 
-            <a href="/residents">Residents</a> / 
-            Service Requests
-          </nav>
-          <h1>Service Request Management</h1>
-        </div>
-        <div class="header-actions">
-          <a href="/service-requests/new" id="btnSubmitServiceRequest" class="btn btn-primary">+ Submit Service Request</a>
-          <a href="/residents" class="btn btn-outline">View Residents</a>
-        </div>
+        <a href="/dashboard" class="header-brand-link">
+          <div class="header-brand">
+            <span class="portal-badge">Civic Portal</span>
+            <span class="portal-title">Community Services Management System</span>
+          </div>
+        </a>
+        <nav class="portal-nav" aria-label="Main Navigation">
+          <a href="/dashboard" class="nav-link">Dashboard</a>
+          <a href="/residents" class="nav-link">Residents</a>
+          <a href="/service-requests" class="nav-link active" aria-current="page">Service Requests</a>
+        </nav>
       </div>
     </header>
 
     <main class="page-content">
+      <div class="breadcrumb-bar">
+        <nav class="breadcrumbs">
+          <a href="/">Home</a> / 
+          <a href="/dashboard">Dashboard</a> / 
+          Service Request Management
+        </nav>
+      </div>
+
+      <div class="page-title-row">
+        <div>
+          <h1>Service Request Management</h1>
+          <p class="section-subtitle">Search, filter, track, and process community service and clearance requests</p>
+        </div>
+        <div class="quick-actions">
+          <a href="/service-requests/new" id="btnSubmitServiceRequest" class="btn btn-primary">+ Submit Service Request</a>
+        </div>
+      </div>
       <% if (message) { %>
         <div class="alert alert-success" role="status" id="flashMessage">
           <%= message %>
@@ -51,7 +68,7 @@
             >
 
             <label for="statusFilter" class="sr-only">Filter by Status</label>
-            <select id="statusFilter" name="status" class="filter-select">
+            <select id="statusFilter" name="status" class="filter-select" onchange="this.form.submit()">
               <option value="" <%= (!statusFilter) ? 'selected' : '' %>>All Statuses</option>
               <option value="Pending" <%= (statusFilter === 'Pending') ? 'selected' : '' %>>Pending</option>
               <option value="In Progress" <%= (statusFilter === 'In Progress') ? 'selected' : '' %>>In Progress</option>
