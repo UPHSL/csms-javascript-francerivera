@@ -98,5 +98,22 @@ export function createApp(options = {}) {
 
   app.use(notFound);
 
+  // Global defensive error handler: prevents raw internal stack trace leaks
+  app.use((err, req, res, _next) => {
+    if (res.headersSent) {
+      return _next(err);
+    }
+    const statusCode = err.status || err.statusCode || 500;
+    if (req.accepts("html")) {
+      return res.status(statusCode).render("residents/not-found", {
+        message: "An internal server error occurred."
+      });
+    }
+    return res.status(statusCode).json({
+      status: "error",
+      message: "An internal server error occurred"
+    });
+  });
+
   return app;
 }

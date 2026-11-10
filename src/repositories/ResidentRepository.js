@@ -46,24 +46,34 @@ export class ResidentRepository {
   }
 
   deactivateById(residentId) {
+    const numericId = Number(residentId);
+    if (!Number.isInteger(numericId) || numericId <= 0) {
+      return null;
+    }
+
     const deactivateStmt = this.db.prepare(`
       UPDATE residents
       SET status = 'Inactive'
       WHERE id = ?
     `);
 
-    deactivateStmt.run(residentId);
-    return this.findById(residentId);
+    deactivateStmt.run(numericId);
+    return this.findById(numericId);
   }
 
   findById(residentId) {
+    const numericId = Number(residentId);
+    if (!Number.isInteger(numericId) || numericId <= 0) {
+      return null;
+    }
+
     const selectStmt = this.db.prepare(`
       SELECT id, first_name, last_name, address, contact_number, email, status
       FROM residents
       WHERE id = ?
     `);
 
-    const row = selectStmt.get(residentId);
+    const row = selectStmt.get(numericId);
 
     if (!row) {
       return null;

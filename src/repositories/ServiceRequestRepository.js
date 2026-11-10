@@ -25,24 +25,34 @@ export class ServiceRequestRepository {
   }
 
   updateStatus(serviceRequestId, newStatus) {
+    const numericId = Number(serviceRequestId);
+    if (!Number.isInteger(numericId) || numericId <= 0) {
+      return null;
+    }
+
     const updateStmt = this.db.prepare(`
       UPDATE service_requests
       SET status = ?
       WHERE id = ?
     `);
 
-    updateStmt.run(newStatus, serviceRequestId);
-    return this.findById(serviceRequestId);
+    updateStmt.run(newStatus, numericId);
+    return this.findById(numericId);
   }
 
   findById(serviceRequestId) {
+    const numericId = Number(serviceRequestId);
+    if (!Number.isInteger(numericId) || numericId <= 0) {
+      return null;
+    }
+
     const selectStmt = this.db.prepare(`
       SELECT id, resident_id, service_type, description, date_requested, status
       FROM service_requests
       WHERE id = ?
     `);
 
-    const row = selectStmt.get(serviceRequestId);
+    const row = selectStmt.get(numericId);
 
     if (!row) {
       return null;

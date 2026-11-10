@@ -20,6 +20,20 @@ function formatValidationErrors(errors = []) {
 }
 
 /**
+ * Defensively parse and validate a route parameter as a positive integer identifier.
+ *
+ * @param {string|number} idParam
+ * @returns {number|null} Valid integer ID or null if malformed.
+ */
+function parseIdentifier(idParam) {
+  const parsed = Number(idParam);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+  return parsed;
+}
+
+/**
  * Handle listing and searching of Residents.
  * Reuses ResidentSearchService (T05).
  *
@@ -102,7 +116,13 @@ export function registerResident(req, res) {
  */
 export function showEditForm(req, res) {
   const { residentRepository } = req.app.locals.services;
-  const residentId = Number(req.params.id);
+  const residentId = parseIdentifier(req.params.id);
+
+  if (!residentId) {
+    return res.status(404).render("residents/not-found", {
+      message: "Resident not found."
+    });
+  }
 
   const resident = residentRepository.findById(residentId);
 
@@ -127,7 +147,14 @@ export function showEditForm(req, res) {
  */
 export function updateResident(req, res) {
   const { residentUpdateService, residentRepository } = req.app.locals.services;
-  const residentId = Number(req.params.id);
+  const residentId = parseIdentifier(req.params.id);
+
+  if (!residentId) {
+    return res.status(404).render("residents/not-found", {
+      message: "Resident not found."
+    });
+  }
+
   const { firstName, lastName, address, contactNumber, email } = req.body;
 
   const result = residentUpdateService.updateResident(residentId, {
@@ -176,7 +203,13 @@ export function updateResident(req, res) {
  */
 export function deactivateResident(req, res) {
   const { residentDeactivationService } = req.app.locals.services;
-  const residentId = Number(req.params.id);
+  const residentId = parseIdentifier(req.params.id);
+
+  if (!residentId) {
+    return res.status(404).render("residents/not-found", {
+      message: "Resident not found."
+    });
+  }
 
   const result = residentDeactivationService.deactivateResident(residentId);
 

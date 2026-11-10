@@ -20,6 +20,20 @@ function formatValidationErrors(errors = []) {
 }
 
 /**
+ * Defensively parse and validate a route parameter as a positive integer identifier.
+ *
+ * @param {string|number} idParam
+ * @returns {number|null} Valid integer ID or null if malformed.
+ */
+function parseIdentifier(idParam) {
+  const parsed = Number(idParam);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return null;
+  }
+  return parsed;
+}
+
+/**
  * Handle listing, searching, and filtering of Service Requests.
  * Reuses ServiceRequestQueryService (T11).
  *
@@ -131,7 +145,13 @@ export function submitServiceRequest(req, res) {
  */
 export function viewServiceRequest(req, res) {
   const { serviceRequestQueryService } = req.app.locals.services;
-  const requestId = Number(req.params.id);
+  const requestId = parseIdentifier(req.params.id);
+
+  if (!requestId) {
+    return res.status(404).render("service-requests/not-found", {
+      message: "Service Request not found."
+    });
+  }
 
   const serviceRequest = serviceRequestQueryService.viewServiceRequest(requestId);
 
@@ -160,7 +180,14 @@ export function viewServiceRequest(req, res) {
  */
 export function updateStatus(req, res) {
   const { serviceRequestStatusService } = req.app.locals.services;
-  const requestId = Number(req.params.id);
+  const requestId = parseIdentifier(req.params.id);
+
+  if (!requestId) {
+    return res.status(404).render("service-requests/not-found", {
+      message: "Service Request not found."
+    });
+  }
+
   const requestedStatus = req.body.status;
 
   const result = serviceRequestStatusService.updateStatus(requestId, requestedStatus);
