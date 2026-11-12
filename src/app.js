@@ -18,6 +18,7 @@ import { ServiceRequestSubmissionService } from "./services/ServiceRequestSubmis
 import { ServiceRequestStatusService } from "./services/ServiceRequestStatusService.js";
 import { ServiceRequestQueryService } from "./services/ServiceRequestQueryService.js";
 import { DashboardService } from "./services/DashboardService.js";
+import { applicationConfig } from "./config/application.js";
 
 const currentFile = fileURLToPath(import.meta.url);
 const currentDirectory = path.dirname(currentFile);
@@ -93,6 +94,10 @@ export function createApp(options = {}) {
     dashboardService,
     ...(options.services || {})
   };
+
+  app.locals.applicationVersion = applicationConfig.version;
+  app.locals.applicationName = applicationConfig.name;
+  app.locals.shortName = applicationConfig.shortName;
 
   app.use(mainRoutes);
 
