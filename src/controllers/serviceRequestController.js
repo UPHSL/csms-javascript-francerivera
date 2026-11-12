@@ -237,6 +237,7 @@ export function updateStatus(req, res) {
  * @param {import("express").Response} res
  */
 export function startProcessing(req, res) {
+  req.body = req.body || {};
   req.body.status = "In Progress";
   return updateStatus(req, res);
 }
@@ -248,6 +249,7 @@ export function startProcessing(req, res) {
  * @param {import("express").Response} res
  */
 export function completeRequest(req, res) {
+  req.body = req.body || {};
   req.body.status = "Completed";
   return updateStatus(req, res);
 }
@@ -259,6 +261,7 @@ export function completeRequest(req, res) {
  * @param {import("express").Response} res
  */
 export function cancelRequest(req, res) {
+  req.body = req.body || {};
   req.body.status = "Cancelled";
   return updateStatus(req, res);
 }

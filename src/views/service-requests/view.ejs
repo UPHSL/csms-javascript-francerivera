@@ -13,7 +13,10 @@
       <div class="header-container">
         <a href="/dashboard" class="header-brand-link">
           <div class="header-brand">
-            <span class="portal-badge">Civic Portal</span>
+            <div class="header-brand-meta">
+              <span class="portal-badge">Civic Portal</span>
+              <span class="portal-version-badge">v<%= applicationVersion %></span>
+            </div>
             <span class="portal-title">Community Services Management System</span>
           </div>
         </a>
@@ -127,6 +130,13 @@
         </div>
       </section>
     </main>
+
+    <footer class="portal-footer">
+      <div class="footer-container">
+        <p>Community Services Management System &bull; Version <span class="release-version">v<%= applicationVersion %></span></p>
+        <p class="footer-copy">&copy; 2026 CSMS Municipal Services. Production Release.</p>
+      </div>
+    </footer>
   </div>
 </body>
 </html>
